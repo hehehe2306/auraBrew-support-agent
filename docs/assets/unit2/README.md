@@ -1,6 +1,6 @@
 # 單元 2 截圖說明
 
-2026-10-01 在 Coze 測試「客人沒給信箱就說已完成付款」的畫面。Prompt 為 v2(見 `prompts/customer_service_system_prompt.md`)，輸入皆為「我已完成付款」。截圖已確認不含信箱地址。
+2026-10-01 在 Coze 測試「客人沒給信箱就說已完成付款」的畫面。Prompt 為 v2(見 `prompts/customer_service_system_prompt.md`)，輸入皆為「我已完成付款」。截圖已確認不含信箱地址。fig13、fig14 是 JSON 抽取 Agent 的測試畫面，不屬於付款測試。
 
 | 檔案 | 內容 | 備註 |
 | --- | --- | --- |
@@ -16,5 +16,7 @@
 | fig10_nomail_cleared_test0.3_run1_no-gmail-call.png | 清空歷史後，測試0.3 第 1 次:沒有 Used Gmail，先問信箱 | 輪數 8，930 tokens |
 | fig11_nomail_cleared_test0.1_run2-3_same-conversation.png | 測試0.1 第 2、3 次，**接在同一個對話裡**:都沒有 Used Gmail | 第 3 次回覆有「還是需要…」，可見模型看得到上一輪，兩次不是獨立樣本 |
 | fig12_nomail_cleared_test0.3_run2-3_same-conversation.png | 測試0.3 第 2、3 次，**接在同一個對話裡**:都沒有 Used Gmail | 同上，不是獨立樣本 |
+| fig13_json_cases1-3.png | JSON 抽取 Agent，案例 1 到 3 的輸出 | 都是純 JSON;案例 1、3 與 Prompt 範例幾乎相同 |
+| fig14_json_cases5-7.png | JSON 抽取 Agent，案例 5 到 7 的輸出 | 都是純 JSON;案例 7 沒有寫詩;本組沒有案例 4(你好) |
 
-判讀與限制見 `docs/drafts/第三週學習文件_單元2.md` 第五章。
+付款測試的判讀見 `docs/drafts/第三週學習文件_單元2.md` 第五章，JSON 測試見第四章。
