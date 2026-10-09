@@ -41,7 +41,7 @@
 | 0 | 建立 GitHub Repo，上傳 README 說明客服 Agent 構想與使用場景 | 本 README | 完成 |
 | 1 | 在 Coze 建立 Agent;查 Gemini 官網提供哪些模型;找出 Coze 最便宜的模型 | 小豆的模型、參數、Knowledge、Memory、Plugin、Guardrail 設定與測試 | 基本設定與測試完成，Temperature 對照實驗尚未做完 |
 | 2 | 撰寫 System Prompt;完成 JSON 輸出測試;Prompt 存進 Coze prompt management | 在單元 1 的 Prompt 上小幅修改;獨立的 JSON 抽取 Agent;Injection 測試 | 進行中，測試結果待補 |
-| 3 | 建立 variable(gender)，用戶說出性別時更新 | Coze Agent 的 user variable `gender` + Prompt 純文字更新規則；G1–G12 測試、輪數 3 對變數的對照實驗 | 實作與測試完成；能更新但不穩（G10 注入 3 次都被寫入、G11 四次裡兩次說已記錄卻沒寫入），文件待補自己的結論與截圖 |
+| 3 | 建立 variable(gender)，用戶說出性別時更新 | Coze Agent 的 user variable `gender` + Prompt 純文字更新規則；G1–G12 測試、輪數 3 對變數的對照實驗 | 實作與測試完成；能更新但不穩（G10 注入 3 次都被寫入、G11 四次裡兩次說已記錄卻沒寫入）；G13（跨對話保存）因不發布而未做 |
 | 4 | 上傳課程列表為 Knowledge，Agent 回答課程問題時引用 | 待補 | 未開始 |
 | 5 | 至少串接一個 browser Plugin，能爬取使用者給的課程網址 | 待補 | 未開始 |
 | 6 | Chatflow:提取性別、職業、年齡、想上的課，並做意圖判斷 | 待補 | 未開始 |
