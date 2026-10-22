@@ -1,0 +1,68 @@
+{
+  "_note": "AuraBrew 手冊事實的唯一來源。手冊與測試預期值都該以這裡為準；改事實先改這裡，再跑 experiments/check_facts.py。referenced_by 只列我用 grep 查到的文件，沒有列到的不代表沒有引用。",
+  "manual_file": "knowledge/aurabrew_product_manual.md",
+  "facts": {
+    "x1_price": {
+      "value": 4980,
+      "manual_snippet": "| 價格 | NT$ {v} |",
+      "referenced_by": [
+        "docs/drafts/第二週學習文件_單元1.md：Knowledge 測試（問 X1 價格答 4,980）",
+        "docs/drafts/第三週學習文件_單元2_新版.md：注入案例 7（NT$2,490 是 4,980 的一半）",
+        "docs/drafts/第四週學習文件_單元3.md：輪數對照第 2 輪（X1 多少錢）"
+      ]
+    },
+    "g1_price": {
+      "value": 1680,
+      "manual_snippet": "| 價格 | NT$ {v} |",
+      "referenced_by": [
+        "docs/drafts/第四週學習文件_單元3.md：輪數對照第 6 輪（G1 多少錢）"
+      ]
+    },
+    "bundle_price": {
+      "value": 6200,
+      "manual_snippet": "套裝價 NT$ {v}",
+      "referenced_by": [
+        "docs/drafts/單元1_Coze客服Agent草稿.md（內嵌手冊副本）",
+        "docs/drafts/單元2_Prompt設定與測試草稿.md（內嵌手冊副本）",
+        "docs/單元2時做部分.md（內嵌手冊副本）",
+        "docs/學習文件單元2第三版.md（內嵌手冊副本）"
+      ]
+    },
+    "ship_days": {
+      "value": "3–5",
+      "manual_snippet": "訂單成立後 {v} 個工作天內出貨",
+      "referenced_by": [
+        "docs/drafts/第三週學習文件_單元2_新版.md：Prompt comparison 比較 3 與修改 5（問出貨）"
+      ]
+    },
+    "return_days": {
+      "value": 7,
+      "manual_snippet": "到貨 {v} 天內未拆封可全額退款",
+      "referenced_by": [
+        "docs/drafts/第三週學習文件_單元2_新版.md：修改 5 的「為什麼」欄（引用 7 天退換貨）"
+      ]
+    },
+    "x1_warranty": {
+      "value": "1 年",
+      "manual_snippet": "{v}原廠保固",
+      "referenced_by": []
+    },
+    "g1_warranty": {
+      "value": "6 個月",
+      "manual_snippet": "| 保固 | {v} |",
+      "referenced_by": [
+        "docs/drafts/第二週學習文件_單元1.md：Knowledge 測試（問 G1 保固答 6 個月）"
+      ]
+    }
+  },
+  "derived": {
+    "bundle_saving": {
+      "terms": [["x1_price", 1], ["g1_price", 1], ["bundle_price", -1]],
+      "stated_pattern": "省 NT\\$\\s?([\\d,]+)",
+      "referenced_by": [
+        "docs/drafts/單元1_Coze客服Agent草稿.md（內嵌手冊副本）",
+        "docs/學習文件單元2第三版.md（內嵌手冊副本）"
+      ]
+    }
+  }
+}
