@@ -45,6 +45,26 @@ class CheckMargin(unittest.TestCase):
     def test_one_cent_rounding_is_tolerated(self):
         self.assertEqual(cm.check(fake(available_funds=70000.01, buying_power=280000.04)), [])
 
+    def test_real_summary_with_one_cent_rounding_passes(self):
+        # 假數字，但捨入特性和真實帳戶摘要相同（真實數字不進 repo）：
+        # ELV - 初始保證金 = 166612.47 但回報 166612.48（浮點差 0.0100000000093，舊的比較會誤判）；可用資金 x 4 = 666449.92 但回報 666449.91
+        s = fake(equity_with_loan_value=199087.02, net_liquidation=199000.0,
+                 initial_margin=32474.55, maintenance_margin=40000.0,
+                 available_funds=166612.48, excess_liquidity=159087.02,
+                 buying_power=666449.91)
+        self.assertEqual(cm.check(s), [])
+
+    def test_glossary_variant_tolerates_the_same_rounding(self):
+        s = fake(equity_with_loan_value=199087.02, net_liquidation=199000.0,
+                 initial_margin=32474.55, maintenance_margin=40000.0,
+                 available_funds=166612.48, excess_liquidity=159087.02,
+                 buying_power=666449.91)
+        self.assertEqual(cm.check(dict(s, prev_day_elv=200087.02)), [])      # 前日 ELV 較高：兩算式相同
+        self.assertTrue(any("詞彙表版" in p for p in cm.check(dict(s, prev_day_elv=198087.02))))  # 較低：不同
+
+    def test_two_cent_difference_is_still_caught(self):
+        self.assertTrue(any("可用資金" in p for p in cm.check(fake(available_funds=70000.02))))
+
     def test_missing_field_is_reported(self):
         s = fake()
         del s["buying_power"]

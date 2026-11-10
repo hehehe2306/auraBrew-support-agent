@@ -32,7 +32,8 @@ LEVERAGE = 4      # 保證金帳戶購買力倍數（官方 FAQ）
 
 
 def close(a, b, tol=TOLERANCE):
-    return abs(a - b) <= tol
+    # 浮點誤差：差 1 分的兩個數相減可能得到 0.0100000000093，不能直接和 0.01 比（見測試）
+    return abs(a - b) <= tol + 1e-6
 
 
 def check(s, leverage=LEVERAGE):
@@ -54,14 +55,15 @@ def check(s, leverage=LEVERAGE):
         problems.append(f"[超額流動性] excess_liquidity={s['excess_liquidity']}，"
                         f"但 ELV - 維持保證金 = {want:.2f}")
 
+    # 可用資金本身有 ±0.5 分的四捨五入，乘上倍數後誤差也跟著放大
     want = s["available_funds"] * leverage
-    if not close(s["buying_power"], want):
+    if not close(s["buying_power"], want, TOLERANCE * leverage):
         problems.append(f"[購買力] buying_power={s['buying_power']}，"
                         f"但 可用資金 x {leverage} = {want:.2f}")
 
     if "prev_day_elv" in s:
         alt = (min(elv, s["prev_day_elv"]) - s["initial_margin"]) * leverage
-        if not close(s["buying_power"], alt):
+        if not close(s["buying_power"], alt, TOLERANCE * leverage):
             problems.append(f"[購買力·詞彙表版] 取 min(ELV, 前日 ELV) 算出 {alt:.2f}，"
                             f"與 buying_power={s['buying_power']} 不同")
     return problems
