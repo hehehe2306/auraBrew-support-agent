@@ -29,7 +29,7 @@
 | `experiments/check_fx_margin.py` | 外匯餘額保證金驗算(照 IBKR 知識庫 KB970 範例;只驗官方範例那一種情況,折減率由呼叫者給) |
 | `experiments/guardrail.py` | 程式版前端護欄(詞表比對、隨機標籤隔離、LLM 輸出格式錯誤時封鎖);不呼叫模型,詞表由呼叫者給 |
 | `experiments/cross_check.py` | 兩個獨立算法互相稽查:把 Python 驗算的比例(只有比例與通過/不通過)和 ibkr-agent 的 metrics/stress JSON 逐項比對;容許差暫定 |
-| `webapp/` | 期末練習網頁(Streamlit):同學輸入假數字 → 驗算 → 寫一列到 Google Sheet;`logic.py` 有單元測試,`app.py` 本機沒跑過(見 `webapp/README.md`) |
+| `webapp/` | 期末練習網頁(Streamlit):同學輸入假數字 → 驗算 → 寫一列到 Google Sheet;寫入走 Apps Script(`apps_script.gs`);`logic.py` 有單元測試;2026-11-23 部署後用三組範例實測寫入測試 Sheet 成功(見 `webapp/README.md`) |
 | `experiments/check_facts.py` | AuraBrew 手冊與事實表的一致性檢查 |
 | `experiments/test_*.py` | 對應的單元測試(只用假數字) |
 | `knowledge/` | AuraBrew 手冊與事實表(客服時期);課程列表 |
@@ -67,7 +67,7 @@ python experiments/check_facts.py
 - 背景資訊 = `knowledge/` 與 `docs/drafts/IBKR*.md`(IBKR 背景檔尚未整理成一組)。
 - 記憶 = Claude 的專案記憶(本專案與 `ibkr-agent` 各有一組)。
 - 排程 = 三個 Claude 排程任務:週二到週六 06:30 Python 驗算(本專案,只存比例)、07:30 `ibkr-agent` 健檢→壓力測試→趨勢→兩邊互相稽查、每週日對照檢核清單。
-- 另需:網頁互動 + 資料寫進老師給的 Google Sheet(2026-11-23 決定做法,見下方「已決定」;尚未部署)。
+- 另需:網頁互動 + 資料寫進老師給的 Google Sheet(2026-11-23 已部署並用自己的測試 Sheet 實測;老師的 Sheet 待問)。
 
 ## 還沒決定、不要自己決定
 
