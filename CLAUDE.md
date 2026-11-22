@@ -27,6 +27,7 @@
 | --- | --- |
 | `experiments/check_margin.py`、`stress_margin.py` | IBKR 保證金欄位稽查與壓力測試(只用標準函式庫) |
 | `experiments/check_fx_margin.py` | 外匯餘額保證金驗算(照 IBKR 知識庫 KB970 範例;只驗官方範例那一種情況,折減率由呼叫者給) |
+| `experiments/guardrail.py` | 程式版前端護欄(詞表比對、隨機標籤隔離、LLM 輸出格式錯誤時封鎖);不呼叫模型,詞表由呼叫者給 |
 | `experiments/check_facts.py` | AuraBrew 手冊與事實表的一致性檢查 |
 | `experiments/test_*.py` | 對應的單元測試(只用假數字) |
 | `knowledge/` | AuraBrew 手冊與事實表(客服時期);課程列表 |
@@ -38,7 +39,7 @@
 ## 怎麼跑
 
 ```
-python -m unittest experiments.test_check_margin experiments.test_stress_margin experiments.test_check_facts experiments.test_check_fx_margin -v
+python -m unittest experiments.test_check_margin experiments.test_stress_margin experiments.test_check_facts experiments.test_check_fx_margin experiments.test_guardrail -v
 python experiments/check_margin.py summary.json
 python experiments/check_facts.py
 ```
