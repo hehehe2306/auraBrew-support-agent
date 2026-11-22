@@ -28,6 +28,7 @@
 | `experiments/check_margin.py`、`stress_margin.py` | IBKR 保證金欄位稽查與壓力測試(只用標準函式庫) |
 | `experiments/check_fx_margin.py` | 外匯餘額保證金驗算(照 IBKR 知識庫 KB970 範例;只驗官方範例那一種情況,折減率由呼叫者給) |
 | `experiments/guardrail.py` | 程式版前端護欄(詞表比對、隨機標籤隔離、LLM 輸出格式錯誤時封鎖);不呼叫模型,詞表由呼叫者給 |
+| `experiments/cross_check.py` | 兩個獨立算法互相稽查:把 Python 驗算的比例(只有比例與通過/不通過)和 ibkr-agent 的 metrics/stress JSON 逐項比對;容許差暫定 |
 | `experiments/check_facts.py` | AuraBrew 手冊與事實表的一致性檢查 |
 | `experiments/test_*.py` | 對應的單元測試(只用假數字) |
 | `knowledge/` | AuraBrew 手冊與事實表(客服時期);課程列表 |
@@ -39,12 +40,12 @@
 ## 怎麼跑
 
 ```
-python -m unittest experiments.test_check_margin experiments.test_stress_margin experiments.test_check_facts experiments.test_check_fx_margin experiments.test_guardrail -v
+python -m unittest experiments.test_check_margin experiments.test_stress_margin experiments.test_check_facts experiments.test_check_fx_margin experiments.test_guardrail experiments.test_cross_check -v
 python experiments/check_margin.py summary.json
 python experiments/check_facts.py
 ```
 
-這台機器的 Python 在 `C:\Users\User\Tools\Python\python-3.15.2-embed\python.exe`(免安裝版、沒進 PATH、沒有 pip;跑測試的指令見該資料夾的 `README_請先看我.txt`)。
+這台機器的 Python 在 `C:\Users\User\Tools\Python\python-3.15.2-embed\python.exe`(python.org 簽章的免安裝版、沒進 PATH、沒有 pip;跑測試的指令見該資料夾的 `README_請先看我.txt`)。機器上另有 uv 的 Python 3.15,但 **Windows 智慧型應用程式控制會擋它**(未簽章的 `python315.dll`,2026-11-22 查證),不要用。這個免安裝版不會把目前資料夾加進 import 路徑,用 `-m unittest` 時要先 `sys.path.insert(0, '.')`(見 README)。
 
 從 repo 根目錄執行。只用標準函式庫,不需要安裝套件(`rag_retrieval.py` 例外,需要 sentence_transformers 與 bge-m3)。`summary.json` 是帳戶摘要,**不要 commit**。這台機器的 Python 路徑不固定,找不到 `python` 時先確認,不要假設。
 
