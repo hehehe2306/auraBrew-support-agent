@@ -39,21 +39,26 @@ if submitted:
             st.write(line)
         st.caption("簡化模型：所有持倉同比例下跌、維持保證金與持倉市值成正比；不是券商的演算法，也不能預測會不會被強制平倉。")
 
-        cfg = st.secrets.get("sheet") if hasattr(st, "secrets") else None
-        creds = st.secrets.get("gcp_service_account") if hasattr(st, "secrets") else None
-        if not cfg or not creds:
+        # 寫入走 Apps Script 網頁應用程式（webapp/apps_script.gs），不需要服務帳戶金鑰。
+        try:
+            cfg = st.secrets["sheet"]
+            url, token = cfg["webapp_url"], cfg["token"]
+        except Exception:
+            cfg = None
+        if not cfg:
             st.info("尚未設定 Google Sheet，這次沒有記錄。")
         else:
             try:
-                import gspread
-                from google.oauth2.service_account import Credentials
+                import json
+                import urllib.request
 
-                scopes = ["https://www.googleapis.com/auth/spreadsheets"]
-                client = gspread.authorize(Credentials.from_service_account_info(dict(creds), scopes=scopes))
-                ws = client.open_by_key(cfg["key"]).worksheet(cfg.get("worksheet", "練習紀錄"))
-                if not ws.get_values("A1:A1"):
-                    ws.append_row(logic.SHEET_HEADER, value_input_option="USER_ENTERED")
-                ws.append_row(logic.sheet_row(values, result, nickname), value_input_option="USER_ENTERED")
-                st.success("已記錄到 Google Sheet。")
+                body = json.dumps(logic.sheet_payload(values, result, nickname, token), ensure_ascii=False).encode("utf-8")
+                req = urllib.request.Request(url, data=body, headers={"Content-Type": "application/json"})
+                with urllib.request.urlopen(req, timeout=20) as resp:
+                    answer = json.loads(resp.read().decode("utf-8"))
+                if answer.get("ok"):
+                    st.success("已記錄到 Google Sheet。")
+                else:
+                    st.error(f"記錄到 Google Sheet 失敗：{answer.get('error', '未知原因')}")
             except Exception as exc:  # 寫不進去時不影響驗算結果，只提示
                 st.error(f"記錄到 Google Sheet 失敗：{type(exc).__name__}")

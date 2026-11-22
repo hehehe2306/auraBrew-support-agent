@@ -111,3 +111,8 @@ def sheet_row(values, result, nickname="", now=None):
                "" if lev is None else round(lev, 4),
                "" if cus is None else round(cus * 100, 2),
                "" if d is None else round(d * 100, 2)])
+
+
+def sheet_payload(values, result, nickname, token, now=None):
+    """送給 Apps Script（webapp/apps_script.gs）的 JSON 內容：通關碼、標題列、資料列。"""
+    return {"token": token, "header": SHEET_HEADER, "row": sheet_row(values, result, nickname, now)}

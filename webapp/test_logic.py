@@ -79,5 +79,15 @@ class Sheet(unittest.TestCase):
         self.assertEqual(len(logic.clean_nickname("a" * 50)), logic.NICKNAME_MAX)
 
 
+class Payload(unittest.TestCase):
+    def test_payload_has_token_header_and_row_of_same_length(self):
+        ex = logic.EXAMPLES["全部對得上"]
+        p = logic.sheet_payload(ex, logic.run(ex), "", "secret", now=datetime(2026, 11, 23))
+        self.assertEqual(p["token"], "secret")
+        self.assertEqual(len(p["header"]), len(p["row"]))
+        import json
+        json.dumps(p, ensure_ascii=False)  # 要能轉成 JSON 送出
+
+
 if __name__ == "__main__":
     unittest.main()
