@@ -36,9 +36,11 @@ def leverage(s):
 
 
 def cushion(s):
-    """超額流動性占 ELV 的比例：離維持保證金還有多少緩衝。ELV <= 0 回 None。"""
-    elv = s["equity_with_loan_value"]
-    return s["excess_liquidity"] / elv if elv > 0 else None
+    """保證金緩衝（margin cushion）：超額流動性 / 淨清算值，採 IBKR FAQ「What is my Margin Cushion?」的定義
+    （https://www.interactivebrokers.com/support/faq/content/margin-cushion-34494478，查詢日 2026-11-22）。
+    NLV <= 0 回 None。"""
+    nlv = s["net_liquidation"]
+    return s["excess_liquidity"] / nlv if nlv > 0 else None
 
 
 def drop_to_zero_excess(s):
@@ -93,7 +95,7 @@ def main(argv=None):
     lev = "無法計算" if r["leverage"] is None else f"{r['leverage']:.2f}"
     cus = "無法計算" if r["cushion"] is None else f"{r['cushion']:.1%}"
     print(f"槓桿（持倉市值/淨清算值）：{lev}")
-    print(f"超額流動性占 ELV：{cus}")
+    print(f"保證金緩衝（超額流動性/淨清算值）：{cus}")
     if r["drop_to_zero"] is None:
         print(f"超額流動性降到 0 的跌幅：不適用（{r['drop_note']}）")
     else:

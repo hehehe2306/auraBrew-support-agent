@@ -66,7 +66,11 @@ class StressMargin(unittest.TestCase):
 
     def test_cushion(self):
         self.assertAlmostEqual(sm.cushion(levered()), 0.625)
-        self.assertIsNone(sm.cushion(levered(equity_with_loan_value=0.0)))
+        self.assertIsNone(sm.cushion(levered(net_liquidation=0.0)))
+
+    def test_cushion_uses_nlv_not_elv(self):
+        # NLV 與 ELV 不同時才分得出分母：62500 / 125000 = 0.5（若誤用 ELV 會是 0.625）
+        self.assertAlmostEqual(sm.cushion(levered(net_liquidation=125000.0)), 0.5)
 
     def test_reported_leverage_mismatch_is_flagged(self):
         r = sm.assess(levered(leverage="3.0"))
