@@ -5,3 +5,9 @@
 data/
 .obsidian/
 desktop.ini
+
+# Streamlit 與 Google 服務帳戶金鑰（期末網頁）
+.streamlit/secrets.toml
+webapp/.streamlit/secrets.toml
+*service_account*.json
+*service-account*.json

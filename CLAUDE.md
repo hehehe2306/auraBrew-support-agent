@@ -29,6 +29,7 @@
 | `experiments/check_fx_margin.py` | 外匯餘額保證金驗算(照 IBKR 知識庫 KB970 範例;只驗官方範例那一種情況,折減率由呼叫者給) |
 | `experiments/guardrail.py` | 程式版前端護欄(詞表比對、隨機標籤隔離、LLM 輸出格式錯誤時封鎖);不呼叫模型,詞表由呼叫者給 |
 | `experiments/cross_check.py` | 兩個獨立算法互相稽查:把 Python 驗算的比例(只有比例與通過/不通過)和 ibkr-agent 的 metrics/stress JSON 逐項比對;容許差暫定 |
+| `webapp/` | 期末練習網頁(Streamlit):同學輸入假數字 → 驗算 → 寫一列到 Google Sheet;`logic.py` 有單元測試,`app.py` 本機沒跑過(見 `webapp/README.md`) |
 | `experiments/check_facts.py` | AuraBrew 手冊與事實表的一致性檢查 |
 | `experiments/test_*.py` | 對應的單元測試(只用假數字) |
 | `knowledge/` | AuraBrew 手冊與事實表(客服時期);課程列表 |
@@ -40,7 +41,7 @@
 ## 怎麼跑
 
 ```
-python -m unittest experiments.test_check_margin experiments.test_stress_margin experiments.test_check_facts experiments.test_check_fx_margin experiments.test_guardrail experiments.test_cross_check -v
+python -m unittest experiments.test_check_margin experiments.test_stress_margin experiments.test_check_facts experiments.test_check_fx_margin experiments.test_guardrail experiments.test_cross_check webapp.test_logic -v
 python experiments/check_margin.py summary.json
 python experiments/check_facts.py
 ```
@@ -64,16 +65,17 @@ python experiments/check_facts.py
 老師要求能展示**指示、背景資訊、記憶、排程**:
 - 指示 = 本檔。
 - 背景資訊 = `knowledge/` 與 `docs/drafts/IBKR*.md`(IBKR 背景檔尚未整理成一組)。
-- 記憶 = 尚未建立。
-- 排程 = 尚未確定(候選:每日收盤後讀帳戶、跑驗算、寫進 Google Sheet,但**不寫入餘額與持倉**)。
-- 另需:網頁互動 + 資料寫進老師給的 Google Sheet(未開始)。
+- 記憶 = Claude 的專案記憶(本專案與 `ibkr-agent` 各有一組)。
+- 排程 = 三個 Claude 排程任務:週二到週六 06:30 Python 驗算(本專案,只存比例)、07:30 `ibkr-agent` 健檢→壓力測試→趨勢→兩邊互相稽查、每週日對照檢核清單。
+- 另需:網頁互動 + 資料寫進老師給的 Google Sheet(2026-11-23 決定做法,見下方「已決定」;尚未部署)。
 
 ## 還沒決定、不要自己決定
 
 - 風險係數的定義(待問老師)。
-- 期末主體是否確定用 Claude Code、網頁怎麼部署(老師問「GCP 你承受得了嗎」)。
-- 排程與記憶怎麼做。
+- 期末主體是否確定用 Claude Code(`ibkr-agent`)。
+- 練習網頁寫進哪一份 Sheet、欄位格式(待問老師);每日比例能不能放進共用 Sheet。
 
 ## 已決定(補記)
 
 - 2026-11-19:**外匯可以納入專題**(使用者決定;老師 11/18 建議研究外匯)。範圍:**讀懂、驗算、當資料面三者都要**(2026-11-19 使用者決定);驗算程式與資料來源怎麼做還沒定。讀書筆記見 `docs/drafts/IBKR外匯保證金_讀書筆記.md`。外匯下單仍由使用者本人手動,Agent 與程式不下單。
+- 2026-11-23:**期末網頁採「練習型」+ Streamlit Community Cloud**(使用者決定)。同學輸入**假的**帳戶摘要數字,網頁用 `experiments/` 的驗算算出結果,寫一列到 Google Sheet;不碰真實帳戶、不呼叫模型。對話型(網頁上問 Agent)放第二階段。選項比較見 `docs/drafts/期末網頁與GoogleSheet_選項.md`。
