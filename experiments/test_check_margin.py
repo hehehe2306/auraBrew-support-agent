@@ -38,6 +38,16 @@ class CheckMargin(unittest.TestCase):
         problems = cm.check(fake(excess_liquidity=70000.0))
         self.assertTrue(any("超額流動性" in p for p in problems))
 
+    def test_excess_liquidity_relative_tolerance(self):
+        # ELV 100000 → 容許 100000 x 1e-4 = 10
+        self.assertEqual(cm.check(fake(excess_liquidity=80005.0)), [])  # 差 5，在內
+        problems = cm.check(fake(excess_liquidity=80020.0))             # 差 20，在外
+        self.assertTrue(any("超額流動性" in p for p in problems))
+
+    def test_relative_tolerance_does_not_loosen_available_funds(self):
+        problems = cm.check(fake(available_funds=70005.0, buying_power=280020.0))
+        self.assertTrue(any("可用資金" in p for p in problems))
+
     def test_wrong_buying_power_is_caught(self):
         problems = cm.check(fake(buying_power=210000.0))  # 當成 3 倍
         self.assertTrue(any("購買力" in p for p in problems))

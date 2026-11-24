@@ -29,6 +29,10 @@ REQUIRED = [
 ]
 TOLERANCE = 0.01  # 摘要是四捨五入到分，容許 1 分誤差
 LEVERAGE = 4      # 保證金帳戶購買力倍數（官方 FAQ）
+# 超額流動性的相對容許值（占 ELV 的比例）。1e-4 是使用者 2026-11-24 依三筆觀察暫定：
+# 11/24 差約 8.5e-6 應通過，11/21、11/22 差約 5.8e-3 應不通過。官方文件沒有給容許值；
+# 資料變多後再重新檢討。只用在 excess_liquidity，可用資金與購買力維持絕對容許值。
+EL_REL_TOLERANCE = 1e-4
 
 
 def close(a, b, tol=TOLERANCE):
@@ -51,7 +55,7 @@ def check(s, leverage=LEVERAGE):
                         f"但 ELV - 初始保證金 = {want:.2f}")
 
     want = elv - s["maintenance_margin"]
-    if not close(s["excess_liquidity"], want):
+    if not close(s["excess_liquidity"], want, max(TOLERANCE, abs(elv) * EL_REL_TOLERANCE)):
         problems.append(f"[超額流動性] excess_liquidity={s['excess_liquidity']}，"
                         f"但 ELV - 維持保證金 = {want:.2f}")
 
