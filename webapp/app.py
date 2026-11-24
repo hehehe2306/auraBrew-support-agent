@@ -10,7 +10,7 @@ import logic
 st.set_page_config(page_title="保證金欄位驗算練習", page_icon="🧮")
 st.title("保證金欄位驗算練習")
 st.caption("中央大學 AI Agent 課期末專題「美股 IBKR 個人財務分析助理」的練習頁。")
-st.warning("**請只輸入假的數字。**不要輸入真實帳戶的金額；你按下驗算後，輸入的數字會記錄到課程的 Google Sheet。")
+st.warning("**請只輸入假的數字**。不要輸入真實帳戶的金額；你按下驗算後，輸入的數字會記錄到課程的 Google Sheet。")
 
 st.markdown(
     "這一頁檢查幾個保證金欄位**彼此對不對得上**（依 IBKR 官方定義），並用簡化模型估算持倉同比例下跌多少時，"
